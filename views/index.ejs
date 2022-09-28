@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/design.css">
+    <title>NodeChat</title>
+</head>
+<body> 
+  <%- include('nav.ejs') %>
+  <!-- <div class="homeLogo">
+  <img src="" alt="">
+</div> -->
+    <div id="container">
+   <div class="homeLogo" style="display: none;">
+  <img class="mainLogo" src="/public/image/NODE CHAT.png" alt=""><br><Br>
+  <button><a href="/list">채팅하러가기 💬</a></button>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- 사용자 아이디를 사용해 로그인, 로그아웃 보이기 -->
+<h2 class="main-ment" data-id="<%= 사용자 %>"></h2>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+
+
+  setTimeout(()=> $('.homeLogo').fadeIn(), 500)
+
+
+  var dataId = $('h2').data('id')
+console.log(dataId.length)
+if(dataId.length > 0){
+    localStorage.setItem('login',true)
+}
+else{
+  localStorage.setItem('login',false)
+}
+
+if(localStorage.getItem('login') == 'true'){
+        $('.login').html('<a class="borderCss" href="/logout">로그아웃</a>')
+        $('.member').hide()
+        
+    } else{
+        $('.login').html('<a class="borderCss" href="/login">로그인</a>')
+        $('.member').show()
+    }
+// $('.logout').click(function(){
+//   $('div h2').remove('')
+// })
+
+
+
+
+
+</script>
+</html>

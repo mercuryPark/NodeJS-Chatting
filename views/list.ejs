@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/design.css">
+    <title>NodeChat</title>
+</head>
+<body> 
+    <div class="ground"></div>
+    <div>
+        <%- include('nav.ejs') %>
+        <%- include('write.ejs') %>
+        <div id="container">
+       
+        <ul class="list-group">
+            <% for(let i = 0; i<posts.length; i++){ %> 
+            <li class="list-item">
+                <img class="list-img" src="<%= posts[i].이미지 %>" alt="">
+                <div class="list-text">
+                <p><%= posts[i]._id %>번째 채팅방</p>
+                <span><%= posts[i].이름 %></span>
+                <p><%= posts[i].날짜 %></p>
+                <button class="chatroom" data-id="<%= posts[i].작성자 %>">채팅방 입장</button>
+                <button class="delete" data-id="<%= posts[i]._id %>">삭제하기</button>
+                <div class="oner" data-id="<%=사용자._id%>"></div>
+            </div>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+
+   
+</div>
+
+<button class="made">+</button>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<!-- <script src="/main.js"></script> -->
+<script>
+
+      $('.ground').click(function(){
+        $('.ground').removeClass('background')
+        $('.write').fadeOut()
+    })
+     
+    $('.made').click(function(e){
+        $('.ground').addClass('background')
+        $('.write').fadeIn()
+        $('body').css('overflow','hidden')
+    
+        $.ajax({
+            method : 'post',
+            url : '/made',
+            // data : {_id : e.target.dataset.id}
+        }).done((결과)=>{
+            console.log(결과)
+        }).fail(function(에러){
+          console.log(에러)
+        })
+    })
+     
+  
+     
+     for(let i=0; i <= $('.list-group .list-item').length; i++){
+       
+        let 작성자 = $('.chatroom').eq(i).attr("data-id")
+        let 보는사람 = $('.oner').eq(i).attr("data-id")
+        console.log(작성자, 보는사람)
+        if(작성자 == 보는사람){
+            $('.delete').eq(i).show()
+        } else{
+            $('.delete').eq(i).hide()
+        }
+    }
+    
+    $('.chatroom').click(function(e){
+      var _id = e.target.dataset.id;
+    //   var chatName = $('.list-text ')
+      $.ajax({
+            method : 'post',
+            url : '/chatroom',
+            data : {당한사람id : _id}
+        }).done((결과)=>{
+            console.log(결과)
+        }).fail(function(에러){
+          console.log(에러)
+        })
+    });
+
+    // if(사용자 !== posts)
+ 
+
+    $('.delete').click(function(e){
+
+        $.ajax({
+            method : 'DELETE',
+            url : '/delete',
+            data : {_id : e.target.dataset.id}
+        }).done((결과)=>{
+            console.log(결과)
+           $(this).parent('li').fadeOut()
+        }).fail(function(에러){
+          console.log(에러)
+        })
+    })
+    if(localStorage.getItem('login') == 'true'){
+        $('.login').html('<a class="borderCss" href="/logout">로그아웃</a>')
+        $('.member').hide()
+        
+    } else{
+        $('.login').html('<a class="borderCss" href="/login">로그인</a>')
+        $('.member').show()
+    }
+</script>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/design.css">
+    <title>NodeChat</title>
+</head>
+<body> 
+
+    <%- include('nav.ejs') %>
+    <div id="container">
+<div class="chat-container">
+
+<ul class="chat-group chat-list">
+
+    <% for (var i=0; i < data.length ; i++){ %>
+      <li class="list-group-item" data-id="<%= data[i]._id %>">
+        <h6> <%= data[i].title %> </h6>     
+        <h6 class="text-small master" data-id="<%= data[i].member[0] %> "> 채팅건사람 : <%= data[i].name %> </h6>
+        <!-- <p>채팅시작 시간 <%= data[i].date %></p> -->
+      </li>
+    <% } %>
+     
+    <!-- <li class="list-group-item">
+      <h6>채팅방1</h6>
+      <h6 class="text-small">채팅방아이디</h6>
+    </li> -->
+  
+  </ul> 
+<div>
+  <div class="inputBox">
+      <ul class="chat-talk">
+    
+      </ul>
+    
+ 
+      
+  </div>
+  <div class="inputBox2">
+    <input class="inputData" type="text">
+    <button id="send" type="submit">전송</button>
+  </div>
+
+</div>
+</div>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<!-- <script src="/main.js"></script> -->
+<script>
+var 지금누른채팅방id;
+var eventSource; 
+    
+var master = $('.master').data('id')
+
+$('#send').click(function(){
+    var inputData = $('.inputData').val();
+    var 보낼거 = {
+        parent : 지금누른채팅방id,
+        content : inputData
+    }
+     $.post('/message', 보낼거, function(a){
+        console.log(a)
+     })
+})
+
+
+
+
+$('.list-group-item').click(function(){
+    지금누른채팅방id = this.dataset.id
+    $('.chat-talk').html('')
+
+    if(eventSource != undefined){
+           eventSource.close()
+       }
+
+    eventSource = new EventSource('/message/' + 지금누른채팅방id);
+  eventSource.addEventListener('test', function (e){
+   
+console.log(지금누른채팅방id)
+    var 가져온거 = JSON.parse(e.data)
+    가져온거.forEach(function(i, a){
+        if(지금누른채팅방id == a.userid){
+            console.log('하이요')
+        }
+        // console.log(지금누른채팅방id)
+        if(지금누른채팅방id == i.userid){
+                $('.chat-talk').append('<li><span class="chat-box grey">'+ i.content + '</span></li>')
+              
+          } else{
+            // console.log(i)
+             $('.chat-talk').append('<li><span class="chat-box red">'+ i.content + '</span></li>')
+          }
+    })
+  })
+})
+
+
+
+    
+
+
+if(localStorage.getItem('login') == 'true'){
+        $('.login').html('<a class="borderCss" href="/logout">로그아웃</a>')
+        $('.member').hide()
+        
+    } else{
+        $('.login').html('<a class="borderCss" href="/login">로그인</a>')
+        $('.member').show()
+    }
+</script>
+</html>

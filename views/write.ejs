@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/design.css">
+    <title>NodeChat</title>
+</head>
+<body> 
+    
+    <div id="container">
+        
+        <div class="write">
+            <!-- <div class="background"></div> -->
+    <h3 class="main-ment">안녕하세요 <span><%= 사용자.name %></span> 님 환영합니다!</h3>
+        <form action="/add" method="POST" enctype="multipart/form-data">
+            <!-- <form method="POST" action="/upload" enctype="multipart/form-data">
+                
+                <button type="submit">전송</button>
+            </form> -->
+            <input id="img" type="file" name="profile">
+        <div>
+            
+            <input placeholder="제목" class="writeInput ajaxInput" type="text" name="title">
+        </div>
+        <div>
+           
+            <input placeholder="설명" class="writeInput" type="text" name="date">
+        </div>
+        <button class="makeRoom" type="submit">채팅 생성</button>
+    </form>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+
+<script>
+var imgName;
+var imgSrc;
+
+$('#img').change(function(e){
+    imgName = e.target.files[0].name;
+    imgSrc = '/public/image/' + imgName
+    console.log(imgSrc)
+
+    $.ajax({
+            method : 'POST',
+            url : '/img',
+            data : {imgSrc : imgSrc}
+        }).done((결과)=>{
+            // console.log(결과)
+        }).fail(function(에러){
+          console.log(에러)
+        })
+
+
+})
+
+
+if(localStorage.getItem('login') == 'true'){
+        $('.login').html('<a class="borderCss" href="/logout">로그아웃</a>')
+        $('.member').hide()
+        
+    } else{
+        $('.login').html('<a class="borderCss" href="/login">로그인</a>')
+        $('.member').show()
+    }
+
+</script>
+</body>
+</html>

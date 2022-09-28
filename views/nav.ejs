@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=d, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/design.css">
+    <title>NodeChat</title>
+</head>
+
+<style>
+    
+</style>
+<body>
+    <div id="nav">
+        
+        <ul>
+            <a href="/"><img src="/public/image/NODE CHAT-mini.png" alt=""></a>
+            <li><a href="/">홈</a></li>
+            <li><a href="/list">목록</a></li>
+            <!-- <li><a href="/write">채팅방개설</a></li> -->
+            <li class="login"><a href="/login">로그인</a></li>
+            <li class="member"><a href="/member">회원가입</a></li>
+            <li><a href="/chat">채팅방</a></li>
+            <!-- <li><a href="/logout">logout</a></li> -->
+        </ul>
+        <div class="border"></div>
+    </div>
+   
+</body>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+
+<script>
+    $('#nav ul li a').addClass('borderCss');
+
+
+
+   $('#nav ul li').mouseover(function(){
+       $(this).children('a').addClass('fontColor-1')
+   })
+   $('#nav ul li').mouseleave(function(){
+       $(this).children('a').removeClass('fontColor-1')
+    //    $(this).addClass('redColor')
+   })
+
+   
+   $(window).scroll(function(){
+  let scroll = Math.floor(($(window).scrollTop() / 
+	($(document).height() - $(window).height())
+    ) * 100) + '%'
+  $('.border').css('width', scroll)
+})
+
+
+
+
+</script>
+</html>
